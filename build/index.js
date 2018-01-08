@@ -1855,7 +1855,7 @@ var Focusable = function (_Component2) {
 
       return _react2.default.createElement(
         'div',
-        { className: classNames.join(" "), ref: function ref(e) {
+        { 'data-sn-left': this.props['data-sn-left'], 'data-sn-right': this.props['data-sn-right'], className: classNames.join(" "), ref: function ref(e) {
             return _this3.el = e;
           }, tabIndex: '-1' },
         this.props.children

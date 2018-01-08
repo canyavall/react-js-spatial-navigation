@@ -192,7 +192,7 @@ class Focusable extends Component {
     }
 
     return (
-      <div className={classNames.join(" ")} ref={e => this.el = e} tabIndex="-1">
+      <div data-sn-up={this.props['data-sn-up']} data-sn-down={this.props['data-sn-down']} data-sn-left={this.props['data-sn-left']} data-sn-right={this.props['data-sn-right']} className={classNames.join(" ")} ref={e => this.el = e} tabIndex="-1">
         {this.props.children}
       </div>
     );
