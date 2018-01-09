@@ -1749,9 +1749,15 @@ var SpatialNavigation = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
+      var classNames = [];
+
+      if (this.props.className) {
+        classNames.push(this.props.className);
+      }
+
       return _react2.default.createElement(
         'div',
-        null,
+        { className: classNames.join(" ") },
         this.props.children
       );
     }
@@ -1855,7 +1861,7 @@ var Focusable = function (_Component2) {
 
       return _react2.default.createElement(
         'div',
-        { 'data-sn-left': this.props['data-sn-left'], 'data-sn-right': this.props['data-sn-right'], className: classNames.join(" "), ref: function ref(e) {
+        { 'data-sn-up': this.props['data-sn-up'], 'data-sn-down': this.props['data-sn-down'], 'data-sn-left': this.props['data-sn-left'], 'data-sn-right': this.props['data-sn-right'], className: classNames.join(" "), ref: function ref(e) {
             return _this3.el = e;
           }, tabIndex: '-1' },
         this.props.children
@@ -1943,9 +1949,15 @@ var FocusableSection = function (_Component3) {
   }, {
     key: 'render',
     value: function render() {
+      var classNames = [];
+
+      if (this.props.className) {
+        classNames.push(this.props.className);
+      }
+
       return _react2.default.createElement(
         'div',
-        null,
+        { className: classNames.join(" ") },
         this.props.children
       );
     }
