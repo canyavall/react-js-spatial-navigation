@@ -180,27 +180,44 @@ class Focusable extends Component {
     this.el.removeEventListener("sn:enter-up", this._componentClickEnter);
   }
 
+  ref = (el) => {
+    this.el = el;
+  }
+
   render() {
     let classNames = [this.context.focusableSectionId ? this.context.focusableSectionId : config.focusableClassName];
 
-    if (this.props.active) {
+    const {
+      active,
+      onFocus,
+      children,
+      className,
+      onUnfocus,
+      onClickEnter,
+      ...rest
+    } = this.props
+
+    if (active) {
       classNames.push(config.activeClassName);
     }
 
-    if (this.props.className) {
-      classNames.push(this.props.className);
+    if (className) {
+      classNames.push(className);
     }
 
     return (
-      <div data-sn-up={this.props['data-sn-up']} data-sn-down={this.props['data-sn-down']} data-sn-left={this.props['data-sn-left']} data-sn-right={this.props['data-sn-right']} className={classNames.join(" ")} ref={e => this.el = e} tabIndex="-1">
-        {this.props.children}
+      <div {...rest} className={classNames.join(" ")} ref={this.ref} tabIndex="-1">
+        {children}
       </div>
     );
   }
 }
 
 Focusable.contextTypes = {
-  focusableSectionId: PropTypes.string
+  focusableSectionId: PropTypes.string,
+  onClickEnter: PropTypes.func,
+  onUnfocus: PropTypes.func,
+  onFocus: PropTypes.func
 };
 
 /*
@@ -229,7 +246,7 @@ class FocusableSection extends Component {
   }
 
   componentWillMount() {
-    this.sectionId = JsSpatialNavigation.add({});
+    this.sectionId = JsSpatialNavigation.add(this.props.sectionId, {});
   }
 
   componentWillUnmount() {
@@ -262,17 +279,30 @@ class FocusableSection extends Component {
   render() {
     let classNames = [];
 
-    if (this.props.className) {
-      classNames.push(this.props.className);
+    const {
+      children,
+      className,
+      sectionId,
+      defaultElement,
+      enterTo,
+      ...rest
+    } = this.props
+
+    if (className) {
+      classNames.push(className);
     }
 
     return (
-      <div className={classNames.join(" ")}>
-        {this.props.children}
+      <div {...rest} className={classNames.join(" ")}>
+        {children}
       </div>
     );
   }
 }
+
+FocusableSection.propTypes = {
+  sectionId: PropTypes.string
+};
 
 FocusableSection.childContextTypes = {
   focusableSectionId: PropTypes.string

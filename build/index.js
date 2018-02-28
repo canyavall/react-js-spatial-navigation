@@ -1602,6 +1602,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.JsSpatialNavigation = exports.Focusable = exports.FocusableSection = exports.default = undefined;
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -1619,6 +1621,8 @@ var _spatial_navigation = __webpack_require__(5);
 var _spatial_navigation2 = _interopRequireDefault(_spatial_navigation);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1804,6 +1808,8 @@ var Focusable = function (_Component2) {
       return _this2.componentUnfocused(event);
     }, _this2._componentClickEnter = function (event) {
       return _this2.componentClickEnter(event);
+    }, _this2.ref = function (el) {
+      _this2.el = el;
     }, _temp), _possibleConstructorReturn(_this2, _ret);
   }
 
@@ -1847,24 +1853,29 @@ var Focusable = function (_Component2) {
   }, {
     key: 'render',
     value: function render() {
-      var _this3 = this;
-
       var classNames = [this.context.focusableSectionId ? this.context.focusableSectionId : config.focusableClassName];
 
-      if (this.props.active) {
+      var _props = this.props,
+          active = _props.active,
+          onFocus = _props.onFocus,
+          children = _props.children,
+          className = _props.className,
+          onUnfocus = _props.onUnfocus,
+          onClickEnter = _props.onClickEnter,
+          rest = _objectWithoutProperties(_props, ['active', 'onFocus', 'children', 'className', 'onUnfocus', 'onClickEnter']);
+
+      if (active) {
         classNames.push(config.activeClassName);
       }
 
-      if (this.props.className) {
-        classNames.push(this.props.className);
+      if (className) {
+        classNames.push(className);
       }
 
       return _react2.default.createElement(
         'div',
-        { 'data-sn-up': this.props['data-sn-up'], 'data-sn-down': this.props['data-sn-down'], 'data-sn-left': this.props['data-sn-left'], 'data-sn-right': this.props['data-sn-right'], className: classNames.join(" "), ref: function ref(e) {
-            return _this3.el = e;
-          }, tabIndex: '-1' },
-        this.props.children
+        _extends({}, rest, { className: classNames.join(" "), ref: this.ref, tabIndex: '-1' }),
+        children
       );
     }
   }]);
@@ -1873,7 +1884,10 @@ var Focusable = function (_Component2) {
 }(_react.Component);
 
 Focusable.contextTypes = {
-  focusableSectionId: _propTypes2.default.string
+  focusableSectionId: _propTypes2.default.string,
+  onClickEnter: _propTypes2.default.func,
+  onUnfocus: _propTypes2.default.func,
+  onFocus: _propTypes2.default.func
 };
 
 /*
@@ -1914,7 +1928,7 @@ var FocusableSection = function (_Component3) {
   }, {
     key: 'componentWillMount',
     value: function componentWillMount() {
-      this.sectionId = _spatial_navigation2.default.add({});
+      this.sectionId = _spatial_navigation2.default.add(this.props.sectionId, {});
     }
   }, {
     key: 'componentWillUnmount',
@@ -1951,20 +1965,32 @@ var FocusableSection = function (_Component3) {
     value: function render() {
       var classNames = [];
 
-      if (this.props.className) {
-        classNames.push(this.props.className);
+      var _props2 = this.props,
+          children = _props2.children,
+          className = _props2.className,
+          sectionId = _props2.sectionId,
+          defaultElement = _props2.defaultElement,
+          enterTo = _props2.enterTo,
+          rest = _objectWithoutProperties(_props2, ['children', 'className', 'sectionId', 'defaultElement', 'enterTo']);
+
+      if (className) {
+        classNames.push(className);
       }
 
       return _react2.default.createElement(
         'div',
-        { className: classNames.join(" ") },
-        this.props.children
+        _extends({}, rest, { className: classNames.join(" ") }),
+        children
       );
     }
   }]);
 
   return FocusableSection;
 }(_react.Component);
+
+FocusableSection.propTypes = {
+  sectionId: _propTypes2.default.string
+};
 
 FocusableSection.childContextTypes = {
   focusableSectionId: _propTypes2.default.string
