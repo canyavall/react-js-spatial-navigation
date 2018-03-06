@@ -240,6 +240,19 @@ Focusable.contextTypes = {
 *       * an empty string.
 */
 class FocusableSection extends Component {
+  createHandler(handlerName) {
+    return (e) => {
+      const handler = this.props[handlerName];
+
+      if (handler) {
+        return handler(e);
+      }
+    }
+  }
+
+  handleWillUnfocus = this.createHandler('onWillUnfocus')
+  handleWillFocus = this.createHandler('onWillFocus')
+  
   getChildContext() {
     return {focusableSectionId: this.sectionId};
   }
@@ -250,6 +263,9 @@ class FocusableSection extends Component {
 
   componentWillUnmount() {
     JsSpatialNavigation.remove(this.sectionId);
+
+    this.el.removeEventListener("sn:willunfocus", this.handleWillUnfocus);
+    this.el.removeEventListener("sn:willfocus", this.handleWillFocus);
   }
 
   _getSelector() {
@@ -273,6 +289,15 @@ class FocusableSection extends Component {
       enterTo: enterTo,
       defaultElement: defaultElement
     });
+
+    if (!this.el) { return; }
+
+    this.el.addEventListener("sn:willunfocus", this.handleWillUnfocus);
+    this.el.addEventListener("sn:willfocus", this.handleWillFocus);
+  }
+
+  ref = (el) => {
+    this.el = el;
   }
 
   render() {
@@ -283,6 +308,8 @@ class FocusableSection extends Component {
       className,
       sectionId,
       defaultElement,
+      onWillUnfocus,
+      onWillFocus,
       enterTo,
       ...rest
     } = this.props
@@ -292,7 +319,7 @@ class FocusableSection extends Component {
     }
 
     return (
-      <div {...rest} className={classNames.join(" ")}>
+      <div ref={this.ref} {...rest} className={classNames.join(" ")}>
         {children}
       </div>
     );

@@ -1909,12 +1909,35 @@ var FocusableSection = function (_Component3) {
   _inherits(FocusableSection, _Component3);
 
   function FocusableSection() {
+    var _ref2;
+
+    var _temp2, _this4, _ret2;
+
     _classCallCheck(this, FocusableSection);
 
-    return _possibleConstructorReturn(this, (FocusableSection.__proto__ || Object.getPrototypeOf(FocusableSection)).apply(this, arguments));
+    for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      args[_key2] = arguments[_key2];
+    }
+
+    return _ret2 = (_temp2 = (_this4 = _possibleConstructorReturn(this, (_ref2 = FocusableSection.__proto__ || Object.getPrototypeOf(FocusableSection)).call.apply(_ref2, [this].concat(args))), _this4), _this4.handleWillUnfocus = _this4.createHandler('onWillUnfocus'), _this4.handleWillFocus = _this4.createHandler('onWillFocus'), _this4.ref = function (el) {
+      _this4.el = el;
+    }, _temp2), _possibleConstructorReturn(_this4, _ret2);
   }
 
   _createClass(FocusableSection, [{
+    key: 'createHandler',
+    value: function createHandler(handlerName) {
+      var _this5 = this;
+
+      return function (e) {
+        var handler = _this5.props[handlerName];
+
+        if (handler) {
+          return handler(e);
+        }
+      };
+    }
+  }, {
     key: 'getChildContext',
     value: function getChildContext() {
       return { focusableSectionId: this.sectionId };
@@ -1928,6 +1951,9 @@ var FocusableSection = function (_Component3) {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
       _spatial_navigation2.default.remove(this.sectionId);
+
+      this.el.removeEventListener("sn:willunfocus", this.handleWillUnfocus);
+      this.el.removeEventListener("sn:willfocus", this.handleWillFocus);
     }
   }, {
     key: '_getSelector',
@@ -1953,6 +1979,13 @@ var FocusableSection = function (_Component3) {
         enterTo: enterTo,
         defaultElement: defaultElement
       });
+
+      if (!this.el) {
+        return;
+      }
+
+      this.el.addEventListener("sn:willunfocus", this.handleWillUnfocus);
+      this.el.addEventListener("sn:willfocus", this.handleWillFocus);
     }
   }, {
     key: 'render',
@@ -1964,8 +1997,10 @@ var FocusableSection = function (_Component3) {
           className = _props2.className,
           sectionId = _props2.sectionId,
           defaultElement = _props2.defaultElement,
+          onWillUnfocus = _props2.onWillUnfocus,
+          onWillFocus = _props2.onWillFocus,
           enterTo = _props2.enterTo,
-          rest = _objectWithoutProperties(_props2, ['children', 'className', 'sectionId', 'defaultElement', 'enterTo']);
+          rest = _objectWithoutProperties(_props2, ['children', 'className', 'sectionId', 'defaultElement', 'onWillUnfocus', 'onWillFocus', 'enterTo']);
 
       if (className) {
         classNames.push(className);
@@ -1973,7 +2008,7 @@ var FocusableSection = function (_Component3) {
 
       return _react2.default.createElement(
         'div',
-        _extends({}, rest, { className: classNames.join(" ") }),
+        _extends({ ref: this.ref }, rest, { className: classNames.join(" ") }),
         children
       );
     }
