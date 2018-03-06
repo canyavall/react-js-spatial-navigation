@@ -143,41 +143,38 @@ function getSelector(id) {
 *     A function that will be fired when the component is focused and enter key is pressed.
 */
 class Focusable extends Component {
-  componentFocused(e) {
-    if (this.props.onFocus) {
-      this.props.onFocus(e);
+  createHandler(handlerName) {
+    return (e) => {
+      const handler = this.props[handlerName];
+
+      if (handler) {
+        return handler(e);
+      }
     }
   }
 
-  componentUnfocused(e) {
-    if (this.props.onUnfocus) {
-      this.props.onUnfocus(e);
-    }
-  }
-
-  componentClickEnter(e) {
-    if (this.props.onClickEnter) {
-      this.props.onClickEnter(e);
-    }
-  }
-
-  _componentFocused = (event) => this.componentFocused(event);
-  _componentUnfocused = (event) => this.componentUnfocused(event);
-  _componentClickEnter = (event) => this.componentClickEnter(event);
+  handleWillUnfocus = this.createHandler('onWillUnfocus')
+  handleWillFocus = this.createHandler('onWillFocus')
+  handleFocused = this.createHandler('onFocus')
+  handleUnfocused = this.createHandler('onUnfocus')
+  handleClickEnter = this.createHandler('onClickEnter')
 
   componentDidMount() {
-    if (!this.el)
-      return;
+    if (!this.el) { return; }
 
-    this.el.addEventListener("sn:focused", this._componentFocused);
-    this.el.addEventListener("sn:unfocused", this._componentUnfocused);
-    this.el.addEventListener("sn:enter-up", this._componentClickEnter);
+    this.el.addEventListener("sn:willunfocus", this.handleWillUnfocus);
+    this.el.addEventListener("sn:willfocus", this.handleWillFocus);
+    this.el.addEventListener("sn:focused", this.handleFocused);
+    this.el.addEventListener("sn:unfocused", this.handleUnfocused);
+    this.el.addEventListener("sn:enter-up", this.handleClickEnter);
   }
 
   componentWillUnmount() {
-    this.el.removeEventListener("sn:focused", this._componentFocused);
-    this.el.removeEventListener("sn:unfocused", this._componentUnfocused);
-    this.el.removeEventListener("sn:enter-up", this._componentClickEnter);
+    this.el.removeEventListener("sn:willunfocus", this.handleWillUnfocus);
+    this.el.removeEventListener("sn:willfocus", this.handleWillFocus);
+    this.el.removeEventListener("sn:focused", this.handleFocused);
+    this.el.removeEventListener("sn:unfocused", this.handleUnfocused);
+    this.el.removeEventListener("sn:enter-up", this.handleClickEnter);
   }
 
   ref = (el) => {
@@ -194,6 +191,8 @@ class Focusable extends Component {
       className,
       onUnfocus,
       onClickEnter,
+      onWillUnfocus,
+      onWillFocus,
       ...rest
     } = this.props
 

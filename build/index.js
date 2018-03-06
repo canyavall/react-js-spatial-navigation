@@ -1802,53 +1802,45 @@ var Focusable = function (_Component2) {
       args[_key] = arguments[_key];
     }
 
-    return _ret = (_temp = (_this2 = _possibleConstructorReturn(this, (_ref = Focusable.__proto__ || Object.getPrototypeOf(Focusable)).call.apply(_ref, [this].concat(args))), _this2), _this2._componentFocused = function (event) {
-      return _this2.componentFocused(event);
-    }, _this2._componentUnfocused = function (event) {
-      return _this2.componentUnfocused(event);
-    }, _this2._componentClickEnter = function (event) {
-      return _this2.componentClickEnter(event);
-    }, _this2.ref = function (el) {
+    return _ret = (_temp = (_this2 = _possibleConstructorReturn(this, (_ref = Focusable.__proto__ || Object.getPrototypeOf(Focusable)).call.apply(_ref, [this].concat(args))), _this2), _this2.handleWillUnfocus = _this2.createHandler('onWillUnfocus'), _this2.handleWillFocus = _this2.createHandler('onWillFocus'), _this2.handleFocused = _this2.createHandler('onFocus'), _this2.handleUnfocused = _this2.createHandler('onUnfocus'), _this2.handleClickEnter = _this2.createHandler('onClickEnter'), _this2.ref = function (el) {
       _this2.el = el;
     }, _temp), _possibleConstructorReturn(_this2, _ret);
   }
 
   _createClass(Focusable, [{
-    key: 'componentFocused',
-    value: function componentFocused(e) {
-      if (this.props.onFocus) {
-        this.props.onFocus(e);
-      }
-    }
-  }, {
-    key: 'componentUnfocused',
-    value: function componentUnfocused(e) {
-      if (this.props.onUnfocus) {
-        this.props.onUnfocus(e);
-      }
-    }
-  }, {
-    key: 'componentClickEnter',
-    value: function componentClickEnter(e) {
-      if (this.props.onClickEnter) {
-        this.props.onClickEnter(e);
-      }
+    key: 'createHandler',
+    value: function createHandler(handlerName) {
+      var _this3 = this;
+
+      return function (e) {
+        var handler = _this3.props[handlerName];
+
+        if (handler) {
+          return handler(e);
+        }
+      };
     }
   }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
-      if (!this.el) return;
+      if (!this.el) {
+        return;
+      }
 
-      this.el.addEventListener("sn:focused", this._componentFocused);
-      this.el.addEventListener("sn:unfocused", this._componentUnfocused);
-      this.el.addEventListener("sn:enter-up", this._componentClickEnter);
+      this.el.addEventListener("sn:willunfocus", this.handleWillUnfocus);
+      this.el.addEventListener("sn:willfocus", this.handleWillFocus);
+      this.el.addEventListener("sn:focused", this.handleFocused);
+      this.el.addEventListener("sn:unfocused", this.handleUnfocused);
+      this.el.addEventListener("sn:enter-up", this.handleClickEnter);
     }
   }, {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
-      this.el.removeEventListener("sn:focused", this._componentFocused);
-      this.el.removeEventListener("sn:unfocused", this._componentUnfocused);
-      this.el.removeEventListener("sn:enter-up", this._componentClickEnter);
+      this.el.removeEventListener("sn:willunfocus", this.handleWillUnfocus);
+      this.el.removeEventListener("sn:willfocus", this.handleWillFocus);
+      this.el.removeEventListener("sn:focused", this.handleFocused);
+      this.el.removeEventListener("sn:unfocused", this.handleUnfocused);
+      this.el.removeEventListener("sn:enter-up", this.handleClickEnter);
     }
   }, {
     key: 'render',
@@ -1862,7 +1854,9 @@ var Focusable = function (_Component2) {
           className = _props.className,
           onUnfocus = _props.onUnfocus,
           onClickEnter = _props.onClickEnter,
-          rest = _objectWithoutProperties(_props, ['active', 'onFocus', 'children', 'className', 'onUnfocus', 'onClickEnter']);
+          onWillUnfocus = _props.onWillUnfocus,
+          onWillFocus = _props.onWillFocus,
+          rest = _objectWithoutProperties(_props, ['active', 'onFocus', 'children', 'className', 'onUnfocus', 'onClickEnter', 'onWillUnfocus', 'onWillFocus']);
 
       if (active) {
         classNames.push(config.activeClassName);
