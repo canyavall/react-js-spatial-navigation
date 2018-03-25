@@ -252,7 +252,7 @@ class FocusableSection extends Component {
 
   handleWillUnfocus = this.createHandler('onWillUnfocus')
   handleWillFocus = this.createHandler('onWillFocus')
-  
+
   getChildContext() {
     return {focusableSectionId: this.sectionId};
   }
@@ -298,6 +298,9 @@ class FocusableSection extends Component {
 
   ref = (el) => {
     this.el = el;
+    if (this.props.containerRef) {
+      this.props.containerRef(el);
+    }
   }
 
   render() {
@@ -306,6 +309,7 @@ class FocusableSection extends Component {
     const {
       children,
       className,
+      containerRef,
       sectionId,
       defaultElement,
       onWillUnfocus,
@@ -327,6 +331,7 @@ class FocusableSection extends Component {
 }
 
 FocusableSection.propTypes = {
+  containerRef: PropTypes.func,
   sectionId: PropTypes.string
 };
 

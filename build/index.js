@@ -1921,6 +1921,9 @@ var FocusableSection = function (_Component3) {
 
     return _ret2 = (_temp2 = (_this4 = _possibleConstructorReturn(this, (_ref2 = FocusableSection.__proto__ || Object.getPrototypeOf(FocusableSection)).call.apply(_ref2, [this].concat(args))), _this4), _this4.handleWillUnfocus = _this4.createHandler('onWillUnfocus'), _this4.handleWillFocus = _this4.createHandler('onWillFocus'), _this4.ref = function (el) {
       _this4.el = el;
+      if (_this4.props.containerRef) {
+        _this4.props.containerRef(el);
+      }
     }, _temp2), _possibleConstructorReturn(_this4, _ret2);
   }
 
@@ -1995,12 +1998,13 @@ var FocusableSection = function (_Component3) {
       var _props2 = this.props,
           children = _props2.children,
           className = _props2.className,
+          containerRef = _props2.containerRef,
           sectionId = _props2.sectionId,
           defaultElement = _props2.defaultElement,
           onWillUnfocus = _props2.onWillUnfocus,
           onWillFocus = _props2.onWillFocus,
           enterTo = _props2.enterTo,
-          rest = _objectWithoutProperties(_props2, ['children', 'className', 'sectionId', 'defaultElement', 'onWillUnfocus', 'onWillFocus', 'enterTo']);
+          rest = _objectWithoutProperties(_props2, ['children', 'className', 'containerRef', 'sectionId', 'defaultElement', 'onWillUnfocus', 'onWillFocus', 'enterTo']);
 
       if (className) {
         classNames.push(className);
@@ -2018,6 +2022,7 @@ var FocusableSection = function (_Component3) {
 }(_react.Component);
 
 FocusableSection.propTypes = {
+  containerRef: _propTypes2.default.func,
   sectionId: _propTypes2.default.string
 };
 
