@@ -946,8 +946,8 @@ function getSectionDefaultElement(sectionId) {
 }
 
 function getSectionLastFocusedElement(sectionId) {
-  var lastFocusedElement = _sections[sectionId].lastFocusedElement;
-  if (!isNavigable(lastFocusedElement, sectionId, true)) {
+  var lastFocusedElement = _sections[sectionId] && _sections[sectionId].lastFocusedElement;
+  if (lastFocusedElement && !isNavigable(lastFocusedElement, sectionId, true)) {
     return null;
   }
   return lastFocusedElement;
