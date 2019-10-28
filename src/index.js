@@ -16,6 +16,10 @@ let config = {};
 * The spatial navigation only work within the Focusable components.
 */
 class SpatialNavigation extends Component {
+  constructor(props) {
+    super(props);
+    config = Object.assign(defaultConfig, this.getConfigFromProps.call(this));
+  }
 
   getConfigFromProps() {
     let propsConfig = {};
@@ -91,10 +95,6 @@ class SpatialNavigation extends Component {
     }
 
     return propsConfig;
-  }
-
-  componentWillMount() {
-    config = Object.assign(defaultConfig, this.getConfigFromProps.call(this));
   }
 
   componentDidMount() {
@@ -240,6 +240,8 @@ Focusable.contextTypes = {
 *       * an empty string.
 */
 class FocusableSection extends Component {
+  sectionId = JsSpatialNavigation.add(this.props.sectionId, {});
+
   createHandler(handlerName) {
     return (e) => {
       const handler = this.props[handlerName];
@@ -255,10 +257,6 @@ class FocusableSection extends Component {
 
   getChildContext() {
     return {focusableSectionId: this.sectionId};
-  }
-
-  componentWillMount() {
-    this.sectionId = JsSpatialNavigation.add(this.props.sectionId, {});
   }
 
   componentWillUnmount() {
