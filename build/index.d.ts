@@ -20,8 +20,7 @@ export interface FocusableProps {
     onWillFocus?: Function;
 }
 
-export class Focusable extends React.Component<any, any> {
-    new (props: FocusableProps)
+export class Focusable<TFocusable = FocusableProps> extends React.Component<TFocusable> {
 }
 
 export interface FocusableSectionProps {
@@ -30,7 +29,7 @@ export interface FocusableSectionProps {
     enterTo: EnterTo;
 }
 
-export class FocusableSection extends React.Component<any, any> {
+export class FocusableSection<TFocusableSection = FocusableSectionProps> extends React.Component<TFocusableSection> {
     new (props: FocusableSectionProps)
 }
 
