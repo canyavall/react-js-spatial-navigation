@@ -21,7 +21,7 @@ export interface FocusableProps {
 }
 
 export class Focusable extends React.Component<any, any> {
-    new (FocusableProps: any)
+    new (props: FocusableProps)
 }
 
 export interface FocusableSectionProps {
@@ -31,7 +31,7 @@ export interface FocusableSectionProps {
 }
 
 export class FocusableSection extends React.Component<any, any> {
-    new (FocusableSectionProps: any)
+    new (props: FocusableSectionProps)
 }
 
 export enum EnterTo {
