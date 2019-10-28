@@ -1730,13 +1730,10 @@ var SpatialNavigation = function (_Component) {
       return propsConfig;
     }
   }, {
-    key: 'componentWillMount',
-    value: function componentWillMount() {
-      config = Object.assign(defaultConfig, this.getConfigFromProps.call(this));
-    }
-  }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
+      config = Object.assign(defaultConfig, this.getConfigFromProps.call(this));
+
       if (!this.props.customInit) {
         _spatial_navigation2.default.init();
         _spatial_navigation2.default.add(config);
@@ -1919,7 +1916,7 @@ var FocusableSection = function (_Component3) {
       args[_key2] = arguments[_key2];
     }
 
-    return _ret2 = (_temp2 = (_this4 = _possibleConstructorReturn(this, (_ref2 = FocusableSection.__proto__ || Object.getPrototypeOf(FocusableSection)).call.apply(_ref2, [this].concat(args))), _this4), _this4.handleWillUnfocus = _this4.createHandler('onWillUnfocus'), _this4.handleWillFocus = _this4.createHandler('onWillFocus'), _this4.ref = function (el) {
+    return _ret2 = (_temp2 = (_this4 = _possibleConstructorReturn(this, (_ref2 = FocusableSection.__proto__ || Object.getPrototypeOf(FocusableSection)).call.apply(_ref2, [this].concat(args))), _this4), _this4.sectionId = _spatial_navigation2.default.add(_this4.props.sectionId, {}), _this4.handleWillUnfocus = _this4.createHandler('onWillUnfocus'), _this4.handleWillFocus = _this4.createHandler('onWillFocus'), _this4.ref = function (el) {
       _this4.el = el;
       if (_this4.props.containerRef) {
         _this4.props.containerRef(el);
@@ -1944,11 +1941,6 @@ var FocusableSection = function (_Component3) {
     key: 'getChildContext',
     value: function getChildContext() {
       return { focusableSectionId: this.sectionId };
-    }
-  }, {
-    key: 'componentWillMount',
-    value: function componentWillMount() {
-      this.sectionId = _spatial_navigation2.default.add(this.props.sectionId, {});
     }
   }, {
     key: 'componentWillUnmount',

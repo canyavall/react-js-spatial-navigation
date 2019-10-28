@@ -93,11 +93,9 @@ class SpatialNavigation extends Component {
     return propsConfig;
   }
 
-  componentWillMount() {
-    config = Object.assign(defaultConfig, this.getConfigFromProps.call(this));
-  }
-
   componentDidMount() {
+    config = Object.assign(defaultConfig, this.getConfigFromProps.call(this));
+
     if (!this.props.customInit) {
       JsSpatialNavigation.init();
       JsSpatialNavigation.add(config);
@@ -240,6 +238,8 @@ Focusable.contextTypes = {
 *       * an empty string.
 */
 class FocusableSection extends Component {
+  sectionId = JsSpatialNavigation.add(this.props.sectionId, {});
+
   createHandler(handlerName) {
     return (e) => {
       const handler = this.props[handlerName];
@@ -255,10 +255,6 @@ class FocusableSection extends Component {
 
   getChildContext() {
     return {focusableSectionId: this.sectionId};
-  }
-
-  componentWillMount() {
-    this.sectionId = JsSpatialNavigation.add(this.props.sectionId, {});
   }
 
   componentWillUnmount() {
